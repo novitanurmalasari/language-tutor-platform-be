@@ -4,7 +4,7 @@ import com.learnwithshanazar.language_tutor_platform_be.enums.Language;
 import com.learnwithshanazar.language_tutor_platform_be.enums.Level;
 import lombok.*;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.List;
 

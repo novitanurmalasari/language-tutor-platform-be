@@ -1,0 +1,43 @@
+# src/main/resources/application.yml
+spring:
+  application:
+    name: linguateach-backend
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/linguateach
+    username: linguateach
+    password: linguateach123
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+  
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com
+    password: your-app-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+server:
+  port: 8080
+
+app:
+  email:
+    from: noreply@linguateach.com
+    admin: admin@linguateach.com

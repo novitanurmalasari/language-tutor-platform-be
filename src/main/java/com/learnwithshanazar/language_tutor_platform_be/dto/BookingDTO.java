@@ -3,7 +3,7 @@ package com.learnwithshanazar.language_tutor_platform_be.dto;
 import com.learnwithshanazar.language_tutor_platform_be.enums.BookingStatus;
 import lombok.*;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

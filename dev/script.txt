@@ -1,0 +1,1 @@
+docker run --name postgres-linguateach -e POSTGRES_USER=linguateach -e POSTGRES_PASSWORD=linguateach123 -e POSTGRES_DB=linguateach -p 5432:5432 -d postgres:15

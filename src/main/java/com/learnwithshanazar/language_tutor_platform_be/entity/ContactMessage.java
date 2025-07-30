@@ -2,6 +2,7 @@ package com.learnwithshanazar.language_tutor_platform_be.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "contact_messages")
@@ -9,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ContactMessage extends BaseEntity {
 
     @Column(nullable = false)
@@ -25,5 +26,6 @@ public class ContactMessage extends BaseEntity {
     private String message;
 
     @Column(name = "is_read")
+    @Builder.Default
     private Boolean isRead = false;
 }

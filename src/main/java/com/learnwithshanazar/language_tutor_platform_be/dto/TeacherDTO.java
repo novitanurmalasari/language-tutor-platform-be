@@ -2,7 +2,7 @@ package com.learnwithshanazar.language_tutor_platform_be.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import java.util.List;
 
 @Data

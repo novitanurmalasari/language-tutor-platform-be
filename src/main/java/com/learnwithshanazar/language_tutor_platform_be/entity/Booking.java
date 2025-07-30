@@ -3,6 +3,7 @@ package com.learnwithshanazar.language_tutor_platform_be.entity;
 import com.learnwithshanazar.language_tutor_platform_be.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,7 +14,7 @@ import java.time.LocalTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Booking extends BaseEntity {
 
     @Column(name = "student_name", nullable = false)
@@ -36,6 +37,7 @@ public class Booking extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private BookingStatus status = BookingStatus.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY)

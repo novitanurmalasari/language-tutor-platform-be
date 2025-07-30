@@ -11,13 +11,17 @@ public interface CourseMapper {
     CourseDTO toDTO(Course course);
 
     @Mapping(target = "teacher", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "bookings", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     Course toEntity(CourseDTO courseDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "teacher", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "bookings", ignore = true)
     void updateEntityFromDTO(CourseDTO dto, @MappingTarget Course entity);
 }
-
-

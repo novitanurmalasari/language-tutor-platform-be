@@ -4,6 +4,7 @@ import com.learnwithshanazar.language_tutor_platform_be.enums.Language;
 import com.learnwithshanazar.language_tutor_platform_be.enums.Level;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Course extends BaseEntity {
 
     @Column(nullable = false)
@@ -42,15 +43,18 @@ public class Course extends BaseEntity {
     private Integer maxStudents;
 
     @Column(name = "current_students")
+    @Builder.Default
     private Integer currentStudents = 0;
 
     @Column(name = "is_active")
+    @Builder.Default
     private Boolean isActive = true;
 
     @ElementCollection
     @CollectionTable(name = "course_schedules",
             joinColumns = @JoinColumn(name = "course_id"))
     @Column(name = "day_of_week")
+    @Builder.Default
     private List<String> schedule = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,5 +62,6 @@ public class Course extends BaseEntity {
     private Teacher teacher;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Booking> bookings = new ArrayList<>();
 }

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: linguateach-db
+    environment:
+      POSTGRES_DB: linguateach
+      POSTGRES_USER: linguateach
+      POSTGRES_PASSWORD: linguateach123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - linguateach-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: linguateach-backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/linguateach
+      DB_USERNAME: linguateach
+      DB_PASSWORD: linguateach123
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    ports:
+      - "8080:8080"
+    networks:
+      - linguateach-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: linguateach-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8080/api
+    networks:
+      - linguateach-network
+
+volumes:
+  postgres_data:
+
+networks:
+  linguateach-network:
+    driver: bridge
