@@ -1,3 +1,5 @@
+package com.learnwithshanazar.language_tutor_platform_be.security;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
