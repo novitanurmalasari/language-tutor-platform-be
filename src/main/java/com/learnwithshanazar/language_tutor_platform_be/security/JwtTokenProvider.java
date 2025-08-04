@@ -7,20 +7,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
-    @Value("${app.jwt.secret:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
+    @Value("${app.jwt.secret}")
     private String jwtSecret;
 
     @Value("${app.jwt.expiration:86400000}")
     private int jwtExpirationInMs;
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+
+        // Check if the key is long enough for HS512 (at least 512 bits = 64 bytes)
+        if (keyBytes.length < 64) {
+            // If the key is too short, generate a proper one
+            // In production, you should set a proper key in your configuration
+            return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        }
+
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(Authentication authentication) {
