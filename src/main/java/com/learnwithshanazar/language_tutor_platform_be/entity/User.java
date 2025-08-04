@@ -23,6 +23,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
+    @Builder.Default
     private String role = "ADMIN"; // For now, only admin
 
     @Column(name = "is_active")
