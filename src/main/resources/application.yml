@@ -3,9 +3,10 @@ spring:
     name: linguateach-backend
   
   datasource:
-    url: jdbc:postgresql://localhost:5432/linguateach
-    username: linguateach
-    password: linguateach123
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/linguateach}
+#    url: jdbc:postgresql://localhost:5432/linguateach
+#    username: linguateach
+#    password: linguateach123
     driver-class-name: org.postgresql.Driver
     # HikariCP Configuration
     hikari:
@@ -21,14 +22,17 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:update}
+#      ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false  # Disabled di production
+#        format_sql: true
         jdbc:
           lob:
             non_contextual_creation: true
-          batch_size: 25
+          batch_size: 20  # Reduced untuk Railway
+#          batch_size: 25
           batch_versioned_data: true
         order_inserts: true
         order_updates: true
@@ -36,10 +40,14 @@ spring:
     open-in-view: false  # Better performance & avoid lazy loading issues
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME:your-email@gmail.com}
-    password: ${MAIL_PASSWORD:your-app-password}
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+#    host: smtp.gmail.com
+#    port: 587
+    username: ${MAIL_USERNAME}  # Set di Railway Variables
+    password: ${MAIL_PASSWORD}  # Set di Railway Variables (App Password)
+#    username: ${MAIL_USERNAME:your-email@gmail.com}
+#    password: ${MAIL_PASSWORD:your-app-password}
     properties:
       mail:
         smtp:
@@ -53,10 +61,13 @@ spring:
     test-connection: false  # Set to true to test on startup
 
 server:
-  port: 8080
+  port: ${PORT:8080}  # Railway akan set PORT otomatis
+#  port: 8080
   error:
-    include-message: always
-    include-binding-errors: always
+    include-message: ${ERROR_INCLUDE_MESSAGE:never}  # Security: never di production
+    include-binding-errors: ${ERROR_INCLUDE_BINDING:never}  # Security: never di production
+#    include-message: always
+#    include-binding-errors: always
   compression:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
@@ -64,14 +75,20 @@ server:
 
 app:
   jwt:
-    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-    expiration: 86400000
+    secret: ${JWT_SECRET}  # WAJIB set di Railway Variables - jangan hardcode!
+    expiration: ${JWT_EXPIRATION:86400000}  # 1 day
+#    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+#    expiration: 86400000
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      expiration: 86400000 # a day
+      secret-key: ${JWT_SECRET}  # Same as above
+      expiration: ${JWT_EXPIRATION:86400000}
       refresh-token:
-        expiration: 604800000 # 7 days
+        expiration: ${JWT_REFRESH_EXPIRATION:604800000}  # 7 days
+#      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+#      expiration: 86400000 # a day
+#      refresh-token:
+#        expiration: 604800000 # 7 days
   email:
     from: ${MAIL_FROM:noreply@linguateach.com}
     admin: ${MAIL_ADMIN:admin@linguateach.com}
@@ -79,27 +96,35 @@ app:
 # Logging Configuration
 logging:
   level:
-    root: INFO
-    com.learnwithshanazar.language_tutor_platform_be: DEBUG
-    org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    root: INFO
+    root: ${LOG_LEVEL_ROOT:INFO}
+#    com.learnwithshanazar.language_tutor_platform_be: DEBUG
+    com.learnwithshanazar.language_tutor_platform_be: ${LOG_LEVEL_APP:INFO}
+#    org.springframework.web: INFO
+    org.springframework.web: WARN  # Reduced logging
+#    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: ${LOG_LEVEL_SQL:WARN}
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
     org.hibernate.orm.deprecation: ERROR
     org.hibernate.orm.connections.pooling: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-  file:
-    name: logs/linguateach.log
-    max-size: 10MB
-    max-history: 30
+#    File logging disabled di Railway (menggunakan console logging)
+#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+#  file:
+#    name: logs/linguateach.log
+#    max-size: 10MB
+#    max-history: 30
 
 # Management Endpoints (Optional - for monitoring)
 management:
   endpoints:
     web:
       exposure:
+#        include: health,info,metrics
         include: health,info,metrics
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: never
+#      show-details: when-authorized
